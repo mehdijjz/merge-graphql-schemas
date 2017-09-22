@@ -31,22 +31,23 @@ const fileLoader = (folderPath, options = { recursive: false }) => {
 
     if (pathObj.name.toLowerCase() === 'index') { return; }
 
-    switch (pathObj.ext) {
-      case '.js': {
+    if (options.loadGraphql) {
+      switch (pathObj.ext) {
+        case '.graphqls':
+        case '.gql':
+        case '.graphql': {
+          const file = fs.readFileSync(f, 'utf8');
+          files.push(file.toString());
+          break;
+        }
+  
+        default:
+      }
+    } else if (options.loadResolvers) {
+      if (pathObj.name.split('.')[1] === 'resolver') {
         const file = require(f); // eslint-disable-line
         files.push(file.default || file);
-        break;
       }
-
-      case '.graphqls':
-      case '.gql':
-      case '.graphql': {
-        const file = fs.readFileSync(f, 'utf8');
-        files.push(file.toString());
-        break;
-      }
-
-      default:
     }
   });
   return files;
