@@ -46,7 +46,8 @@ const fileLoader = (folderPath, options = { recursive: false }) => {
     } else if (options.loadResolvers) {
       if (pathObj.name.split('.')[1] === 'resolver') {
         const file = require(f); // eslint-disable-line
-        files.push(file.default || file);
+        const theFile = file.default || file;
+        files.push(options.loader ? options.loader(theFile) : theFile);
       }
     }
   });
