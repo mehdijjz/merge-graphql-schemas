@@ -37,7 +37,7 @@ const fileLoader = (folderPath, options = { recursive: false }) => {
         case '.gql':
         case '.graphql': {
           const file = fs.readFileSync(f, 'utf8');
-          files.push(file.toString());
+          files.push(options.loader ? options.loader(file.toString()) : file.toString());
           break;
         }
   
